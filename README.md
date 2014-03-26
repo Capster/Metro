@@ -1,4 +1,3 @@
-metro
+Metro
 =====
-
-Metro VGUI Library
+Garry's mod metro VGUI library
