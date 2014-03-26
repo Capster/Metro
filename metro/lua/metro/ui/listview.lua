@@ -1,29 +1,4 @@
---[[   _                                
-    ( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
 
-	DListView
-	
-	Columned list view
-	
-	
-	TheList = vgui.Create( "DListView" )
-	
-	local Col1 = TheList:AddColumn( "Address" )
-	local Col2 = TheList:AddColumn( "Port" )
-	
-	Col2:SetMinWidth( 30 )
-	Col2:SetMaxWidth( 30 )
-	
-	TheList:AddLine( "192.168.0.1", "80" )
-	TheList:AddLine( "192.168.0.2", "80" )
-	
-	etc
-	
---]]
 	
 local PANEL = {}
 
@@ -35,8 +10,6 @@ AccessorFunc( PANEL, "m_iDataHeight", 			"DataHeight" )
 
 AccessorFunc( PANEL, "m_bMultiSelect", 			"MultiSelect" )
 AccessorFunc( PANEL, "m_bHideHeaders", 			"HideHeaders" )
-
-Derma_Hook( PANEL, "Paint", "Paint", "ListView" )
 
 
 --[[---------------------------------------------------------
@@ -50,8 +23,8 @@ function PANEL:Init()
 	self:SetHideHeaders( false )
 
 	self:SetDrawBackground( true )
-	self:SetHeaderHeight( 16 )
-	self:SetDataHeight( 17 )
+	self:SetHeaderHeight( 26 )
+	self:SetDataHeight( 22 )
 	
 	self.Columns = {}
 	
@@ -60,11 +33,15 @@ function PANEL:Init()
 	
 	self:SetDirty( true )
 	
-	self.pnlCanvas 	= vgui.Create( "Panel", self )
+	self.pnlCanvas 	= Metro.Create( "Panel", self )
 	
-	self.VBar 		= vgui.Create( "DVScrollBar", self )
+	self.VBar 		= Metro.Create( "MetroVScrollBar", self )
 	self.VBar:SetZPos( 20 )
 
+end
+
+function PANEL:Paint(w, h)
+	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.LVBackground)
 end
 
 --[[---------------------------------------------------------
@@ -111,9 +88,9 @@ function PANEL:AddColumn( strName, strMaterial, iPosition )
 	local pColumn = nil
 	
 	if ( self.m_bSortable ) then
-		pColumn = vgui.Create( "DListView_Column", self )
+		pColumn = Metro.Create( "MetroListViewColumn", self )
 	else
-		pColumn = vgui.Create( "DListView_ColumnPlain", self )
+		pColumn = Metro.Create( "MetroListViewColumnPlain", self )
 	end
 		pColumn:SetName( strName )
 		pColumn:SetMaterial( strMaterial )
@@ -352,7 +329,7 @@ function PANEL:AddLine( ... )
 	self:SetDirty( true )
 	self:InvalidateLayout()
 
-	local Line = vgui.Create( "DListView_Line", self.pnlCanvas )
+	local Line = Metro.Create( "MetroListViewLine", self.pnlCanvas )
 	local ID = table.insert( self.Lines, Line )
 	
 	Line:SetListView( self ) 
@@ -662,29 +639,4 @@ function PANEL:SizeToContents( )
 
 end
 
-
---[[---------------------------------------------------------
-   Name: GenerateExample
------------------------------------------------------------]]
-function PANEL:GenerateExample( ClassName, PropertySheet, Width, Height )
-
-	local ctrl = vgui.Create( ClassName )
-		
-		local Col1 = ctrl:AddColumn( "Address" )
-		local Col2 = ctrl:AddColumn( "Port" )
-	
-		Col2:SetMinWidth( 30 )
-		Col2:SetMaxWidth( 30 )
-	
-		for i=1, 128 do
-			ctrl:AddLine( "192.168.0."..i, "80" )
-		end
-		
-		ctrl:SetSize( 300, 200 )
-		
-	PropertySheet:AddSheet( ClassName, ctrl, nil, true, true )
-
-end
-
-
-derma.DefineControl( "DListView", "Data View", PANEL, "DPanel" )
+Metro.Register( "MetroListView", PANEL, "DPanel" )

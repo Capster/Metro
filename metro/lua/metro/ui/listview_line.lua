@@ -1,11 +1,4 @@
---[[   _                                
-    ( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
 
---]]
 
 local PANEL = {}
 
@@ -20,17 +13,17 @@ end
 
 function PANEL:UpdateColours( skin )
 
-	if ( self:GetParent():IsLineSelected() )	then return self:SetTextStyleColor( skin.Colours.Label.Bright ) end
+	if self:GetParent():IsLineSelected() then
+		return self:SetTextStyleColor( Metro.Colors.TextHighlight )
+	end
 	
-	return self:SetTextStyleColor( skin.Colours.Label.Dark )
+	return self:SetTextStyleColor( Metro.Colors.TextDefault )
 
 end
-
-derma.DefineControl( "DListViewLabel", "", PANEL, "DLabel" )
+Metro.Register( "MetroListViewLabel", PANEL, "MetroLabel" )
 
 local PANEL = {}
 
-Derma_Hook( PANEL, "Paint", "Paint", "ListViewLine" )
 Derma_Hook( PANEL, "ApplySchemeSettings", "Scheme", "ListViewLine" )
 Derma_Hook( PANEL, "PerformLayout", "Layout", "ListViewLine" )
 
@@ -48,6 +41,34 @@ function PANEL:Init()
 	
 	self.Columns = {}
 
+end
+
+function PANEL:Paint(w, h)
+	
+	local x = 0
+	for k, Column in pairs( self.Columns ) do
+	
+		local w = self:GetParent():GetParent():ColumnWidth( k )
+		draw.RoundedBox(0, x, 0, 1, h, Metro.Colors.LVLineCBorder)
+		x = x + w
+	
+	end	
+
+	if self:IsSelected() then
+	
+		draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.LVLineSelectedB)
+		draw.RoundedBox(0, 1, 1, w-2, h-2, Metro.Colors.LVLineSelected)
+		
+	elseif self.Hovered then
+
+		draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.LVLineHoveredB)
+		draw.RoundedBox(0, 1, 1, w-2, h-2, Metro.Colors.LVLineHovered)
+	 
+	elseif self.m_bAlt then
+
+		--draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.LVLineHovered)
+	         
+	end
 end
 
 --[[---------------------------------------------------------
@@ -71,7 +92,7 @@ end
 --[[---------------------------------------------------------
    Name: OnMousePressed
 -----------------------------------------------------------]]
-function PANEL:OnMousePressed( mcode )
+function PANEL:OnMouseReleased( mcode )
 
 	if ( mcode == MOUSE_RIGHT ) then
 	
@@ -133,7 +154,7 @@ function PANEL:SetColumnText( i, strText )
 
 	if ( !IsValid( self.Columns[ i ] ) ) then
 	
-		self.Columns[ i ] = vgui.Create( "DListViewLabel", self )
+		self.Columns[ i ] = Metro.Create( "MetroListViewLabel", self )
 		self.Columns[ i ]:SetMouseInputEnabled( false )
 		
 	end
@@ -181,5 +202,4 @@ function PANEL:DataLayout( ListView )
 
 end
 
-derma.DefineControl( "DListViewLine", "A line from the List View", PANEL, "Panel" )
-derma.DefineControl( "DListView_Line", "A line from the List View", PANEL, "Panel" )
+Metro.Register( "MetroListViewLine", PANEL, "Panel" )

@@ -34,3 +34,29 @@ Metro.Colors.TextEBorder	= Color(118, 118, 118)
 Metro.Colors.TextEInsideFoc = Color(255, 255, 255)
 Metro.Colors.TextEInsideDis	= Color(220, 220, 220)
 Metro.Colors.TextEInside	= Color(230, 237, 245)
+
+
+-- LISTVIEW
+Metro.Colors.LVBackground	= Color(255, 255, 255)
+Metro.Colors.LVLineCBorder	= Color(232, 241, 251)
+Metro.Colors.LVLine			= Color(118, 118, 118)
+Metro.Colors.LVLineSelected	= Color(207, 231, 243)
+Metro.Colors.LVLineHovered	= Color(230, 244, 253)
+Metro.Colors.LVLineSelectedB= Color(77, 148, 178)
+Metro.Colors.LVLineHoveredB	= Color(132, 186, 212)
+
+
+-- LISTVIEW HEADER
+Metro.Colors.LVHeadHovered	= Color(185, 185, 185)
+Metro.Colors.LVHeadSelected	= Color(128, 148, 191)
+Metro.Colors.LVHead			= Color(252, 252, 252)
+Metro.Colors.LVHeadBorder	= Color(232, 232, 232)
+
+
+-- SCROLLBAR
+Metro.Colors.SBBackground	= Color(240, 240, 240)
+Metro.Colors.SBGrip			= Color(205, 205, 205)
+Metro.Colors.SBButtonText	= Color(96, 96, 96)
+--Metro.Colors.SBButton		= Color(232, 241, 251, 100)
+Metro.Colors.SBButtonHover	= Color(240, 240, 240)
+

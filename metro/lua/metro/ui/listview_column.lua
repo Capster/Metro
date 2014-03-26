@@ -1,15 +1,4 @@
---[[   _                                
-    ( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
 
-	DListView
-	
-	Columned list view
-
---]]
 
 local PANEL = {}
 
@@ -23,7 +12,7 @@ Derma_Hook( PANEL, 	"PerformLayout", "Layout", "ListViewHeaderLabel" )
 function PANEL:Init()
 end
 
-derma.DefineControl( "DListViewHeaderLabel", "", PANEL, "DLabel" )
+Metro.Register( "MetroListViewHeaderLabel", PANEL, "DLabel" )
 
 local PANEL = {}
 
@@ -58,8 +47,7 @@ function PANEL:OnCursorMoved()
 	end
 
 end
-
-derma.DefineControl( "DListView_DraggerBar", "", PANEL, "DButton" )
+Metro.Register( "MetroListViewDraggerBar", PANEL, "DButton" )
 
 local PANEL = {}
 
@@ -72,7 +60,6 @@ AccessorFunc( PANEL, "m_bFixedWidth", 			"FixedWidth" )
 AccessorFunc( PANEL, "m_bDesc", 				"Descending" )
 AccessorFunc( PANEL, "m_iColumnID", 			"ColumnID" )
 
-Derma_Hook( PANEL, 	"Paint", "Paint", "ListViewColumn" )
 Derma_Hook( PANEL, 	"ApplySchemeSettings", "Scheme", "ListViewColumn" )
 Derma_Hook( PANEL, 	"PerformLayout", "Layout", "ListViewColumn" )
 
@@ -81,14 +68,30 @@ Derma_Hook( PANEL, 	"PerformLayout", "Layout", "ListViewColumn" )
 -----------------------------------------------------------]]
 function PANEL:Init()
 
-	self.Header = vgui.Create( "DButton", self )
+	self.Header = Metro.Create( "MetroButton", self )
 	self.Header.DoClick = function() self:DoClick() end
 	self.Header.DoRightClick = function() self:DoRightClick() end
-	
-	self.DraggerBar = vgui.Create( "DListView_DraggerBar", self )
+	self.Header.Paint = function(panel, w, h)
+		if self.Header.Hovered then
+
+			draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.LVHeadHovered)
+		 
+		else
+
+			draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.LVHead)
+				 
+		end
+		draw.RoundedBox(0, 0, h-1, w, 1, Metro.Colors.LVHeadBorder)
+	end
+	self.DraggerBar = Metro.Create( "MetroListViewDraggerBar", self )
 	
 	self:SetMinWidth( 10 )
 	self:SetMaxWidth( 1920 * 10 )
+
+end
+
+function PANEL:Paint(w, h)
+
 
 end
 
@@ -190,21 +193,19 @@ function PANEL:SetWidth( iSize )
 end
 
 
-
-derma.DefineControl( "DListView_Column", "", table.Copy( PANEL ), "Panel" )
+Metro.Register( "MetroListViewColumn", table.Copy( PANEL ), "Panel" )
 
 --[[---------------------------------------------------------
    Name: Init
 -----------------------------------------------------------]]
 function PANEL:Init()
 
-	self.Header = vgui.Create( "DListViewHeaderLabel", self )
+	self.Header = Metro.Create( "MetroListViewHeaderLabel", self )
 	
-	self.DraggerBar = vgui.Create( "DListView_DraggerBar", self )
+	self.DraggerBar = Metro.Create( "MetroListViewListViewDraggerBar", self )
 	
 	self:SetMinWidth( 10 )
 	self:SetMaxWidth( 1920 * 10 )
 
 end
-
-derma.DefineControl( "DListView_ColumnPlain", "", PANEL, "Panel" )
+Metro.Register( "MetroListViewColumnPlain", PANEL, "Panel" )

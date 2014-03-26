@@ -1,55 +1,3 @@
---[[   _                                
-	( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
-
-	DVScrollBar
-
-	
-	Usage:
-	
-	Place this control in your panel. You will ideally have another panel or 
-		control which is bigger than the original panel. This is the Canvas.
-	
-	scrollbar:SetUp( _barsize_, _canvassize_ ) should be called whenever
-		the size of your 'canvas' changes.
-		
-	scrollbar:GetOffset() can be called to get the offset of the canvas.
-		You should call this in your PerformLayout function and set the Y 
-		pos of your canvas to this value.
-		
-	Example:
-	
-
-	function PANEL:PerformLayout()
-	
-		local Wide = self:GetWide()
-		local YPos = 0
-		
-		-- Place the scrollbar
-		self.VBar:SetPos( self:GetWide() - 16, 0 )
-		self.VBar:SetSize( 16, self:GetTall() )
-		
-		-- Make sure the scrollbar knows how big our canvas is
-		self.VBar:SetUp( self:GetTall(), self.pnlCanvas:GetTall() )
-		
-		-- Get data from the scrollbar
-		YPos = self.VBar:GetOffset()
-		
-		-- If the scrollbar is enabled make the canvas thinner so it will fit in.
-		if ( self.VBar.Enabled ) then Wide = Wide - 16 end
-			
-		-- Position the canvas according to the scrollbar's data
-		self.pnlCanvas:SetPos( self.Padding, YPos + self.Padding )
-		self.pnlCanvas:SetSize( Wide - self.Padding * 2, self.pnlCanvas:GetTall() )
-	
-	end
-
-	
---]]
-
 local PANEL = {}
 
 --[[---------------------------------------------------------
@@ -62,17 +10,22 @@ function PANEL:Init()
 	self.CanvasSize = 1
 	self.BarSize = 1	
 	
-	self.btnUp = vgui.Create( "DButton", self )
+	self.btnUp = Metro.Create( "MetroButton", self )
 	self.btnUp:SetText( "" )
 	self.btnUp.DoClick = function ( self ) self:GetParent():AddScroll( -1 ) end
-	self.btnUp.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "ButtonUp", panel, w, h ) end
+	self.btnUp.Paint = function( panel, w, h )
+		--derma.SkinHook( "Paint", "ButtonUp", panel, w, h )
+		draw.SimpleText("t", "marlett", w/2, h/2, Metro.Colors.SBButtonText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
+	end
 	
-	self.btnDown = vgui.Create( "DButton", self )
+	self.btnDown = Metro.Create( "MetroButton", self )
 	self.btnDown:SetText( "" )
 	self.btnDown.DoClick = function ( self ) self:GetParent():AddScroll( 1 ) end
-	self.btnDown.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "ButtonDown", panel, w, h ) end
+	self.btnDown.Paint = function( panel, w, h )
+		draw.SimpleText("u", "marlett", w/2, h/2, Metro.Colors.SBButtonText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
+	end
 	
-	self.btnGrip = vgui.Create( "DScrollBarGrip", self )
+	self.btnGrip = Metro.Create( "MetroScrollBarGrip", self )
 	
 	self:SetSize( 15, 15 )
 
@@ -249,7 +202,7 @@ end
 -----------------------------------------------------------]]
 function PANEL:Paint( w, h )
 	
-	derma.SkinHook( "Paint", "VScrollBar", self, w, h )
+	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.SBBackground)
 	return true
 	
 end
@@ -352,4 +305,4 @@ function PANEL:PerformLayout()
 end
 
 
-derma.DefineControl( "DVScrollBar", "A Scrollbar", PANEL, "Panel" )
+Metro.Register( "MetroVScrollBar", PANEL, "Panel" )
