@@ -1,12 +1,4 @@
---[[   _                                
-	( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
 
-	DLabel
---]]
 
 PANEL = {}
 
@@ -26,9 +18,6 @@ AccessorFunc( PANEL, "m_bBright", 				"Bright", 					FORCE_BOOL )
 AccessorFunc( PANEL, "m_bDark", 				"Dark", 					FORCE_BOOL )
 AccessorFunc( PANEL, "m_bHighlight", 			"Highlight", 				FORCE_BOOL )
 
---[[---------------------------------------------------------
-	Init
------------------------------------------------------------]]
 function PANEL:Init()
 
 	self:SetIsToggle( false )
@@ -38,10 +27,8 @@ function PANEL:Init()
 	self:SetKeyboardInputEnabled( false )
 	self:SetDoubleClickingEnabled( true )
 
-	-- Nicer default height
 	self:SetTall( 20 )
 	
-	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled( false )
 	self:SetPaintBorderEnabled( false )
 	
@@ -82,37 +69,24 @@ end
 
 PANEL.SetColor = PANEL.SetTextColor
 
---[[---------------------------------------------------------
-	SetColor
------------------------------------------------------------]]
 function PANEL:GetColor()
 
 	return self.m_colTextStyle
 
 end
 
-
---[[---------------------------------------------------------
-	Exited
------------------------------------------------------------]]
 function PANEL:OnCursorEntered()
 	
 	self:InvalidateLayout( true )
 	
 end
 
---[[---------------------------------------------------------
-	Entered
------------------------------------------------------------]]
 function PANEL:OnCursorExited()
 
 	self:InvalidateLayout( true )
 	
 end
 
---[[---------------------------------------------------------
-	OnMousePressed
------------------------------------------------------------]]
 function PANEL:OnMousePressed( mousecode )
 
 	if ( self:GetDisabled() ) then return end
@@ -129,9 +103,7 @@ function PANEL:OnMousePressed( mousecode )
 		
 		self.LastClickTime = SysTime()
 	end
-	
-	-- If we're selectable and have shift held down then go up
-	-- the parent until we find a selection canvas and start box selection
+
 	if ( self:IsSelectable() && mousecode == MOUSE_LEFT ) then
 	
 		if ( input.IsShiftDown() ) then 
@@ -145,9 +117,6 @@ function PANEL:OnMousePressed( mousecode )
 	self:OnDepressed();
 	self:InvalidateLayout();
 	
-	--
-	-- Tell DragNDrop that we're down, and might start getting dragged!
-	--
 	self:DragMousePress( mousecode );
 
 end
@@ -156,9 +125,6 @@ function PANEL:OnDepressed()
 
 end
 
---[[---------------------------------------------------------
-	OnMouseReleased
------------------------------------------------------------]]
 function PANEL:OnMouseReleased( mousecode )
 
 	self:MouseCapture( false )
@@ -169,9 +135,7 @@ function PANEL:OnMouseReleased( mousecode )
 	self.Depressed = nil
 	self:OnReleased();
 	self:InvalidateLayout();
-	--
-	-- If we were being dragged then don't do the default behaviour!
-	--
+
 	if ( self:DragMouseRelease( mousecode ) ) then
 		return
 	end
@@ -187,14 +151,6 @@ function PANEL:OnMouseReleased( mousecode )
 	
 	if ( !self.Hovered ) then return end
 
-	--
-	-- For the purposes of these callbacks we want to 
-	-- keep depressed true. This helps us out in controls
-	-- like the checkbox in the properties dialog. Because
-	-- the properties dialog will only manualloy change the value
-	-- if IsEditing() is true - and the only way to work out if
-	-- a label/button based control is editing is when it's depressed.
-	--
 	self.Depressed = true
 
 	if ( mousecode == MOUSE_RIGHT ) then
@@ -218,23 +174,14 @@ function PANEL:OnReleased()
 
 end
 
---[[---------------------------------------------------------
-	DoRightClick
------------------------------------------------------------]]
 function PANEL:DoRightClick()
 
 end
 
---[[---------------------------------------------------------
-	DoMiddleClick
------------------------------------------------------------]]
 function PANEL:DoMiddleClick()
 
 end
 
---[[---------------------------------------------------------
-	DoClick
------------------------------------------------------------]]
 function PANEL:DoClick()
 
 	self:Toggle()
@@ -254,56 +201,35 @@ function PANEL:OnToggled( bool )
 
 end
 
-
---[[---------------------------------------------------------
-	DoClickInternal
------------------------------------------------------------]]
 function PANEL:DoClickInternal()
 
 end
 
---[[---------------------------------------------------------
-	DoDoubleClick
------------------------------------------------------------]]
 function PANEL:DoDoubleClick()
 
 end
 
---[[---------------------------------------------------------
-	DoDoubleClickInternal
------------------------------------------------------------]]
 function PANEL:DoDoubleClickInternal()
 	
 end
 
---[[---------------------------------------------------------
-	UpdateColours
------------------------------------------------------------]]
 function PANEL:UpdateColours( skin )
 
-	if ( self.m_bBright )		then return self:SetTextStyleColor( skin.Colours.Label.Bright ) end
-	if ( self.m_bDark )			then return self:SetTextStyleColor( skin.Colours.Label.Dark ) end
-	if ( self.m_bHighlight )	then return self:SetTextStyleColor( skin.Colours.Label.Highlight ) end
+	if self.m_bBright then
+		return self:SetTextStyleColor( Metro.Colors.TextBright )
+	end
+	if self.m_bDark then
+		return self:SetTextStyleColor( Metro.Colors.TextDark )
+	end
+	if self.m_bHighlight then
+		return self:SetTextStyleColor( Metro.Colors.TextHighlight )
+	end
 
-	return self:SetTextStyleColor( skin.Colours.Label.Default )
-
-end
-
---[[---------------------------------------------------------
-   Name: GenerateExample
------------------------------------------------------------]]
-function PANEL:GenerateExample( ClassName, PropertySheet, Width, Height )
-
-	local ctrl = vgui.Create( ClassName )
-		ctrl:SetText( "This is a label example." )
-		ctrl:SizeToContents()
-		
-	PropertySheet:AddSheet( ClassName, ctrl, nil, true, true )
+	return self:SetTextStyleColor( Metro.Colors.TextDefault )
 
 end
 
-
-derma.DefineControl( "DLabel", "A Label", PANEL, "Label" )
+Metro.Register( "MetroLabel", PANEL, "Label" )
 
 
 --[[---------------------------------------------------------
@@ -311,7 +237,7 @@ derma.DefineControl( "DLabel", "A Label", PANEL, "Label" )
 -----------------------------------------------------------]]
 function Label( strText, parent )
 
-	local lbl = vgui.Create( "DLabel", parent )
+	local lbl = Metro.Create( "MetroLabel", parent )
 	lbl:SetText( strText )
 	
 	return lbl

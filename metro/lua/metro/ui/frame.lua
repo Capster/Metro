@@ -1,15 +1,4 @@
---[[   _                                
-	( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
 
-	DFrame
-	
-	A window.
-
---]]
 
 PANEL = {}
 
@@ -37,31 +26,46 @@ function PANEL:Init()
 
 	self:SetPaintShadow( true )
 	
-	self.btnClose = vgui.Create( "DButton", self )
+	self.btnClose = Metro.Create( "MetroButton", self )
+	self.btnClose:SetSize(42, 16)
 	self.btnClose:SetText( "" )
 	self.btnClose.DoClick = function ( button ) self:Close() end
-	self.btnClose.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "WindowCloseButton", panel, w, h ) end
+	self.btnClose.PerformLayout = function(button, w, h)	
+		button:SetPos(self:GetWide() - button:GetWide() - 4, 1)
+		return true
+	end
+	self.btnClose.Paint = function(panel, w, h)	
+		local bg = (panel.Depressed and Color(128, 32, 32)) or (panel:IsHovered() and Color(255, 0, 0)) or Metro.Colors.CrossButton
+			draw.RoundedBox(0, 0, 0, w, h, bg)
+			draw.SimpleText("r", "marlett", w/2, h/2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
+			return true
+	end
 	
-	self.btnMaxim = vgui.Create( "DButton", self )
+	self.btnMaxim = Metro.Create( "MetroButton", self )
+	self.btnMaxim:SetSize(36, 16)
 	self.btnMaxim:SetText( "" )
 	self.btnMaxim.DoClick = function ( button ) self:Close() end
-	self.btnMaxim.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "WindowMaximizeButton", panel, w, h ) end
-	self.btnMaxim:SetDisabled( true )
-
-	self.btnMinim = vgui.Create( "DButton", self )
-	self.btnMinim:SetText( "" )
-	self.btnMinim.DoClick = function ( button ) self:Close() end
-	self.btnMinim.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "WindowMinimizeButton", panel, w, h ) end
-	self.btnMinim:SetDisabled( true )
+	self.btnMaxim.PerformLayout = function(button, w, h)	
+		button:SetPos(self:GetWide() - self.btnClose:GetWide() - button:GetWide() - 4, 1)
+		return true
+	end
+	self.btnMaxim.Paint = function(panel, w, h)	
+		local bg = (panel.Depressed and Metro.Colors.OtherButton) or (panel:IsHovered() and Metro.Colors.OtherButtonH) or Color(0,0,0,0)
+			draw.RoundedBox(0, 0, 0, w, h, bg)
+			draw.SimpleText("1", "marlett", w/2, h/2, Metro.Colors.TextDark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
+			return true
+	end
 
 	self.lblTitle = vgui.Create( "DLabel", self )
+	self.lblTitle:SetFont("MetroSmall")
+	self.lblTitle.Paint = function(panel, w, h)	
+			draw.SimpleText(self.lblTitle.m_Text, panel.m_FontName, w/2, h/2, Metro.Colors.TextDark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
+			return true
+	end
 	self.lblTitle.UpdateColours = function( label, skin )
-	
 		if ( self:IsActive() ) then return label:SetTextStyleColor( skin.Colours.Window.TitleActive ) end
-		
-		return label:SetTextStyleColor( skin.Colours.Window.TitleInactive )
-			
-		end
+		return label:SetTextStyleColor( skin.Colours.Window.TitleInactive )		
+	end
 	
 	self:SetDraggable( true )
 	self:SetSizable( false )
@@ -69,8 +73,8 @@ function PANEL:Init()
 	self:SetDeleteOnClose( true )
 	self:SetTitle( "Window" )
 	
-	self:SetMinWidth( 50 );
-	self:SetMinHeight( 50 );
+	self:SetMinWidth( 200 );
+	self:SetMinHeight( 200 );
 	
 	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled( false )
@@ -87,9 +91,9 @@ end
 -----------------------------------------------------------]]
 function PANEL:ShowCloseButton( bShow )
 
-	self.btnClose:SetVisible( bShow );
-	self.btnMaxim:SetVisible( bShow );
-	self.btnMinim:SetVisible( bShow );
+	self.btnClose:SetVisible( bShow )
+	self.btnMaxim:SetVisible( bShow )
+	--self.btnMinim:SetVisible( bShow )
 
 end
 
@@ -98,6 +102,7 @@ end
 -----------------------------------------------------------]]
 function PANEL:SetTitle( strTitle )
 
+	self.lblTitle.m_Text = strTitle
 	self.lblTitle:SetText( strTitle )
 
 end
@@ -188,7 +193,7 @@ function PANEL:Think()
 	end
 	
 	if ( self.Hovered && self:GetDraggable() && mousey < (self.y + 24) ) then
-		self:SetCursor( "sizeall" )
+		--self:SetCursor( "sizeall" )
 		return
 	end
 	
@@ -208,10 +213,11 @@ end
 function PANEL:Paint( w, h )
 
 	if ( self.m_bBackgroundBlur ) then
-		Derma_DrawBackgroundBlur( self, self.m_fCreateTime )
+		Metro.DrawBackgroundBlur( self, self.m_fCreateTime )
 	end
-
-	derma.SkinHook( "Paint", "Frame", self, w, h )
+	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.BorderColor)
+	draw.RoundedBox(0, 1, 1, w-2, h-2, Metro.Colors.FrameColor)
+	draw.RoundedBox(0, 5, 24, w-10, h-29, Metro.Colors.InsideColor)
 	return true
 
 end
@@ -220,8 +226,8 @@ end
 --[[---------------------------------------------------------
 
 -----------------------------------------------------------]]
-function PANEL:OnMousePressed()
-
+function PANEL:OnMousePressed(mc)
+	
 	if ( self.m_bSizable ) then
 	
 		if ( gui.MouseX() > (self.x + self:GetWide() - 20) &&
@@ -234,7 +240,7 @@ function PANEL:OnMousePressed()
 		
 	end
 	
-	if ( self:GetDraggable() && gui.MouseY() < (self.y + 24) ) then
+	if self:GetDraggable() && gui.MouseY() < (self.y + 24) and mc == MOUSE_LEFT then
 		self.Dragging = { gui.MouseX() - self.x, gui.MouseY() - self.y }
 		self:MouseCapture( true )
 		return
@@ -262,15 +268,8 @@ end
 -----------------------------------------------------------]]
 function PANEL:PerformLayout()
 
-	self.btnClose:SetPos( self:GetWide() - 31 - 4, 0 )
-	self.btnClose:SetSize( 31, 31 )
-
-	self.btnMaxim:SetPos( self:GetWide() - 31*2 - 4, 0 )
-	self.btnMaxim:SetSize( 31, 31 )
-
-	self.btnMinim:SetPos( self:GetWide() - 31*3 - 4, 0 )
-	self.btnMinim:SetSize( 31, 31 )
-	
+	self.btnClose:InvalidateLayout()
+	self.btnMaxim:InvalidateLayout()
 	self.lblTitle:SetPos( 8, 2 )
 	self.lblTitle:SetSize( self:GetWide() - 25, 20 )
 
@@ -289,5 +288,4 @@ function PANEL:IsActive()
 
 end
 
-
-derma.DefineControl( "DFrame", "A simpe window", PANEL, "EditablePanel" )
+Metro.Register("MetroFrame", PANEL, "EditablePanel")
