@@ -213,7 +213,7 @@ function PANEL:DoDoubleClickInternal()
 	
 end
 
-function PANEL:UpdateColours( skin )
+function PANEL:UpdateColours( )
 
 	if self.m_bBright then
 		return self:SetTextStyleColor( Metro.Colors.TextBright )
@@ -231,11 +231,7 @@ end
 
 Metro.Register( "MetroLabel", PANEL, "Label" )
 
-
---[[---------------------------------------------------------
-   Name: Convenience Function
------------------------------------------------------------]]
-function Label( strText, parent )
+function Metro.Label( strText, parent )
 
 	local lbl = Metro.Create( "MetroLabel", parent )
 	lbl:SetText( strText )

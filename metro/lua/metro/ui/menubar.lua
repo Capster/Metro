@@ -1,13 +1,3 @@
---[[   _                                
-    ( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
-
-	DPanel
-
---]]
 local PANEL = {}
 
 AccessorFunc( PANEL, "m_bBackground", 			"PaintBackground",	FORCE_BOOL )
@@ -17,7 +7,6 @@ AccessorFunc( PANEL, "m_bIsMenuComponent", 		"IsMenu", 			FORCE_BOOL )
 AccessorFunc( PANEL, "m_bDisabled", 	"Disabled" )
 AccessorFunc( PANEL, "m_bgColor", 		"BackgroundColor" )
 
-Derma_Hook( PANEL, "Paint", "Paint", "MenuBar" )
 
 --[[---------------------------------------------------------
 	
@@ -25,10 +14,16 @@ Derma_Hook( PANEL, "Paint", "Paint", "MenuBar" )
 function PANEL:Init()
 
 	self:Dock( TOP )
-	self:SetTall( 24 )
+	self:SetTall( 20 )
 
 	self.Menus = {}
 
+end
+
+function PANEL:Paint(w, h)
+	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.MBBackground)
+	draw.RoundedBox(0, 0, h-1, w, 1, Metro.Colors.MBBorder1)
+	draw.RoundedBox(0, 0, h-2, w, 1, Metro.Colors.MBBorder2)
 end
 
 function PANEL:GetOpenMenu()
@@ -56,13 +51,24 @@ function PANEL:AddMenu( label )
 		m:Hide()
 	self.Menus[ label ] = m
 	
-	local b = self:Add( "DButton" )
+	local b = self:Add( "MetroButton" )
 	b:SetText( label )
 	b:Dock( LEFT )
 	b:DockMargin( 5, 0, 0, 0 )
 	b:SetIsMenu( true )
 	b:SetDrawBackground( false )
-	b:SizeToContentsX( 16 )
+	b:SizeToContentsX( 30 )
+	b.Paint = function(self, w, h) 
+		if self.Depressed or self.m_bSelected then
+			draw.RoundedBox( 0, 0, 0, w, h-2, Metro.Colors.PressedButton )
+		elseif self:GetDisabled() then
+			draw.RoundedBox( 0, 0, 0, w, h-2, Metro.Colors.DisabledButton )
+		elseif self.Hovered then
+			draw.RoundedBox( 0, 0, 0, w, h-2, Metro.Colors.LightButton )
+		else
+			draw.RoundedBox( 0, 0, 0, w, h-2, Metro.Colors.MBBackground )
+		end
+	end
 	b.DoClick = function() 
 	
 		if ( m:IsVisible() ) then
@@ -86,28 +92,5 @@ function PANEL:AddMenu( label )
 
 end
 
---[[---------------------------------------------------------
-   Name: GenerateExample
------------------------------------------------------------]]
-function PANEL:GenerateExample( ClassName, PropertySheet, Width, Height )
 
-	local pnl = vgui.Create( "Panel" )
-	pnl:Dock( FILL )
-	pnl:DockMargin( 2, 22, 2, 2 )
-
-	local ctrl = pnl:Add( ClassName )
-		local m = ctrl:AddMenu( "File" )
-			m:AddOption( "New", function() Msg( "Chose New\n" ) end )
-			m:AddOption( "File", function() Msg( "Chose File..\n" ) end )
-			m:AddOption( "Exit", function() Msg( "Chose Exit\n" ) end )
-		local m = ctrl:AddMenu( "Edit" )
-			m:AddOption( "Copy", function() Msg( "Chose Copy\n" ) end )
-			m:AddOption( "Paste", function() Msg( "Chose Paste\n" ) end )
-			m:AddOption( "Blah", function() Msg( "Chose Blah\n" ) end )
-	
-	PropertySheet:AddSheet( ClassName, pnl, nil, true, true )
-
-end
-
-
-derma.DefineControl( "DMenuBar", "", PANEL, "DPanel" )
+Metro.Register( "MetroMenuBar", PANEL, "DPanel" )

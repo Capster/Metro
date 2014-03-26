@@ -15,6 +15,8 @@ Metro.Colors.GripColor		= Color(128, 128, 128)
 Metro.Colors.BasicButton 	= Color(230, 230, 230)
 Metro.Colors.DarkButton  	= Color(75, 75, 75)
 Metro.Colors.LightButton 	= Color(249, 249, 249)
+Metro.Colors.PressedButton 	= Color(200, 200, 200)
+Metro.Colors.DisabledButton = Color(150, 150, 150)
 
 
 -- BUTTONTEXT
@@ -59,4 +61,17 @@ Metro.Colors.SBGrip			= Color(205, 205, 205)
 Metro.Colors.SBButtonText	= Color(96, 96, 96)
 --Metro.Colors.SBButton		= Color(232, 241, 251, 100)
 Metro.Colors.SBButtonHover	= Color(240, 240, 240)
+
+
+-- TABS
+Metro.Colors.TabsBackground	= Color(255, 255, 255)
+Metro.Colors.TabsBorder		= Color(180, 180, 180)
+Metro.Colors.TabsTab		= Color(240, 240, 240)
+Metro.Colors.TabsSeleced	= Color(255, 255, 255)
+
+-- MENUBAR
+Metro.Colors.MBBackground	= Color(245, 246, 247)
+Metro.Colors.MBBorder1		= Color(240, 240, 240)
+Metro.Colors.MBBorder2		= Color(132, 132, 132)
+
 

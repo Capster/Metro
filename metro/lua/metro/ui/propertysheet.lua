@@ -1,20 +1,8 @@
---[[   _                                
-	( )                               
-   _| |   __   _ __   ___ ___     _ _ 
- /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
-( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
-
-	DTab
-
---]]
-
 local PANEL = {}
 
 AccessorFunc( PANEL, "m_pPropertySheet", 			"PropertySheet" )
 AccessorFunc( PANEL, "m_pPanel", 					"Panel" )
 
-Derma_Hook( PANEL, "Paint", "Paint", "Tab" )
 
 --[[---------------------------------------------------------
    Name: Init
@@ -38,7 +26,7 @@ function PANEL:Setup( label, pPropertySheet, pPanel, strMaterial )
 	
 	if ( strMaterial ) then
 	
-		self.Image = vgui.Create( "DImage", self )
+		self.Image = Metro.Create( "DImage", self )
 		self.Image:SetImage( strMaterial )
 		self.Image:SizeToContents()
 		self:InvalidateLayout()
@@ -76,30 +64,20 @@ function PANEL:PerformLayout()
 	
 end
 
---[[---------------------------------------------------------
-	UpdateColours
------------------------------------------------------------]]
-function PANEL:UpdateColours( skin )
+function PANEL:Paint(w, h)
 
-	local Active = self:GetPropertySheet():GetActiveTab() == self
 	
-	if ( Active ) then
-	
-		if ( self:GetDisabled() )	then return self:SetTextStyleColor( skin.Colours.Tab.Active.Disabled ) end
-		if ( self:IsDown() )		then return self:SetTextStyleColor( skin.Colours.Tab.Active.Down ) end
-		if ( self.Hovered )			then return self:SetTextStyleColor( skin.Colours.Tab.Active.Hover ) end
-
-		return self:SetTextStyleColor( skin.Colours.Tab.Active.Normal )
-		
+	if self:IsActive() then
+		draw.RoundedBox(0, 0, 0, w, h-7, Metro.Colors.TabsBorder)
+		draw.RoundedBox(0, 1, 1, w-2, h, Metro.Colors.TabsSeleced)
+	else
+		draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.TabsBorder)
+		draw.RoundedBox(0, 1, 1, w-2, h, Metro.Colors.TabsTab)
 	end
-
-	if ( self:GetDisabled() )	then return self:SetTextStyleColor( skin.Colours.Tab.Inactive.Disabled ) end
-	if ( self:IsDown() )		then return self:SetTextStyleColor( skin.Colours.Tab.Inactive.Down ) end
-	if ( self.Hovered )			then return self:SetTextStyleColor( skin.Colours.Tab.Inactive.Hover ) end
-
-	return self:SetTextStyleColor( skin.Colours.Tab.Inactive.Normal )
-
+	
 end
+
+
 
 function PANEL:ApplySchemeSettings()
 
@@ -131,7 +109,7 @@ function PANEL:DragHoverClick( HoverTime )
 
 end
 
-derma.DefineControl( "DTab", "A Tab for use on the PropertySheet", PANEL, "DButton" )
+Metro.Register( "MetroTab", PANEL, "MetroButton" )
 
 --[[   _                                
 	( )                               
@@ -145,8 +123,6 @@ derma.DefineControl( "DTab", "A Tab for use on the PropertySheet", PANEL, "DButt
 --]]
 
 local PANEL = {}
-
-Derma_Hook( PANEL, "Paint", "Paint", "PropertySheet" )
 
 AccessorFunc( PANEL, "m_pActiveTab", 			"ActiveTab" )
 AccessorFunc( PANEL, "m_iPadding",	 			"Padding" )
@@ -174,6 +150,15 @@ function PANEL:Init()
 	
 end
 
+function PANEL:Paint(w, h)
+	local ActiveTab = self:GetActiveTab()
+	local Offset = 0
+	if ActiveTab then Offset = ActiveTab:GetTall()-8 end
+	draw.RoundedBox(0, 0, Offset, w, h-Offset, Metro.Colors.TabsBorder)
+	draw.RoundedBox(0, 0, Offset+1, w, h-Offset-2, Metro.Colors.TabsSeleced)
+	
+end
+
 --[[---------------------------------------------------------
    Name: AddSheet
 -----------------------------------------------------------]]
@@ -185,7 +170,7 @@ function PANEL:AddSheet( label, panel, material, NoStretchX, NoStretchY, Tooltip
 	
 	Sheet.Name = label;
 
-	Sheet.Tab = vgui.Create( "DTab", self )
+	Sheet.Tab = Metro.Create( "MetroTab", self )
 	Sheet.Tab:SetTooltip( Tooltip )
 	Sheet.Tab:Setup( label, self, panel, material )
 	
@@ -429,4 +414,4 @@ function PANEL:CloseTab( tab, bRemovePanelToo )
 end
 
 
-derma.DefineControl( "DPropertySheet", "", PANEL, "Panel" )
+Metro.Register( "MetroPropertySheet", PANEL, "Panel" )

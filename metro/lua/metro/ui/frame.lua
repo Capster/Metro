@@ -82,7 +82,7 @@ function PANEL:Init()
 	
 	self.m_fCreateTime = SysTime()
 	
-	self:DockPadding( 5, 24 + 5, 5, 5 )
+	self:DockPadding( 5, 24, 5, 5 )
 
 end
 
