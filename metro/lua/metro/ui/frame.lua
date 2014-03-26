@@ -206,18 +206,17 @@ function PANEL:Think()
 	
 end
 
-
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:Paint( w, h )
 
-	if ( self.m_bBackgroundBlur ) then
+	if  self.m_bBackgroundBlur then
 		Metro.DrawBackgroundBlur( self, self.m_fCreateTime )
 	end
 	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.BorderColor)
 	draw.RoundedBox(0, 1, 1, w-2, h-2, Metro.Colors.FrameColor)
 	draw.RoundedBox(0, 5, 24, w-10, h-29, Metro.Colors.InsideColor)
+	if not self:IsActive() then
+		draw.RoundedBox(0, 0, 0, w, h, Color(185, 185, 185, 50))
+	end
 	return true
 
 end
