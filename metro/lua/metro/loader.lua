@@ -11,6 +11,8 @@ include( "metro/ui/VScrollBar.lua" )
 include( "metro/ui/ScrollBarGrip.lua" )
 include( "metro/ui/PropertySheet.lua" )
 include( "metro/ui/MenuBar.lua" )
+include( "metro/ui/Awesomium.lua" )
+include( "metro/ui/Warning.lua" )
 --
 --[[
 include( "metro/ui/DDragBase.lua" )
@@ -32,7 +34,6 @@ include( "metro/ui/DGrid.lua" )
 include( "metro/ui/DLabelURL.lua" )
 include( "metro/ui/DHTMLControls.lua" )
 include( "metro/ui/DImageButton.lua" )
-include( "metro/ui/DHTML.lua" )
 include( "metro/ui/DPanelOverlay.lua" )
 include( "metro/ui/DDrawer.lua" )
 include( "metro/ui/DTree.lua" )
@@ -63,7 +64,7 @@ text:Dock(TOP)
 --text:SetDisabled(true)
 
 ]]
-if ValidPanel(frametest2) then
+--[[if ValidPanel(frametest2) then
 	frametest2:Remove()
 end
 frametest2 = Metro.CreateFrame(600,500)
@@ -93,12 +94,12 @@ for i = 0,50 do
 	TheList2:AddLine( "192.168."..i..".1", "27015" )
 end
 PropertySheet:AddSheet( "Clients", TheList, "icon16/group.png", false, false )
-PropertySheet:AddSheet( "Servers", TheList2, "icon16/server.png", false, false )
+PropertySheet:AddSheet( "Servers", TheList2, "icon16/server.png", false, false )]]
 --[[
 if ValidPanel(frametest3) then
 	frametest3:Remove()
 end
-frametest3 = Metro.CreateFrame(600,500)
+frametest3 = Metro.CreateFrame(1200,800)
 frametest3:SetSizable(true)
 
 local UpMenu = Metro.Create( "MetroMenuBar", frametest3 )
@@ -112,4 +113,8 @@ editMenu:AddOption ("Undo", function()end):SetIcon ("icon16/arrow_undo.png")
 local viewMenu = UpMenu:AddMenu ("View")
 viewMenu:AddOption ("Mode", function() end):SetIcon ("icon16/application_view_list.png")
 
+local html = Metro.Create( "MetroHTML", frametest3 )
+html:Dock(FILL)
+html:OpenURL("http://www.intel.ru/content/www/ru/ru/homepage.html")
+html:CreateAlert( "Awesomium Запрашивает доступ к ClientSide Lua", callback )
 ]]

@@ -75,3 +75,6 @@ Metro.Colors.MBBorder1		= Color(240, 240, 240)
 Metro.Colors.MBBorder2		= Color(132, 132, 132)
 
 
+-- WARNING
+Metro.Colors.WarnBackground	= Color(255, 255, 255)
+Metro.Colors.WarnBorder		= Color(240, 240, 240)
