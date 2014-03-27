@@ -35,3 +35,15 @@ function surface.DrawGrid(x, y, w, h, color)
 	end
 
 end
+
+local cos, sin, DrawPoly = math.cos, math.sin, surface.DrawPoly
+
+function surface.DrawFilledCircle(x,y,radius,quality)
+    local circle = {};
+    local tmp = 0;
+    for i=1,quality do
+        tmp = rad(i*360)/quality
+        circle[i] = {x = x + cos(tmp)*radius,y = y + sin(tmp)*radius};
+    end
+    DrawPoly(circle)
+end
