@@ -4,6 +4,7 @@ fastlua:IncludeClient("metro/tooltip.lua")
 fastlua:IncludeClient("metro/paintfuncs.lua")
 fastlua:IncludeClient("metro/glyphs.lua")
 fastlua:IncludeClient("metro/keyboard.lua")
+fastlua:IncludeClient("metro/postrender.lua")
 
 Metro.IncludeDir("ui")
 Metro.IncludeDir("glyphs")
