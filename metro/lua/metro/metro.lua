@@ -76,3 +76,11 @@ function Metro.DrawBackgroundBlur( panel, starttime )
 	DisableClipping( false )
 
 end
+
+function Metro.IncludeDir(directoryName)
+	local metro_path = debug.getinfo(1).short_src:gsub("\\", "/"):GetPathFromFilename()
+	for k, v in pairs(file.Find(metro_path.."/"..directoryName.."/*.lua", "GAME")) do
+		include(directoryName.."/"..v)
+	end
+	
+end
