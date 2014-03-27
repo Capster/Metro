@@ -1,10 +1,5 @@
-
-
 local PANEL = {}
 
---[[---------------------------------------------------------
-   Name: Init
------------------------------------------------------------]]
 function PANEL:Init()
 
 	self:SetTextInset( 5, 0 )
@@ -37,7 +32,8 @@ function PANEL:SetIcon(icon)
 	if not self.Icon then
 		self:SetColumnText( 1, "      "..self:GetColumnText(1) )
 	end
-	self.Icon = icon
+	self.Icon = Metro.ImageCache():GetImage(icon)
+	self.Icon:SetSize (16, 16)
 end
 
 function PANEL:Init()
@@ -76,40 +72,25 @@ function PANEL:Paint(w, h)
 	end
 	
 	if self.Icon then
-		--self:SetText("   "..self:GetText())
 		local spacing = (self:GetTall () - 16) * 0.5
-		local mat = Material(self.Icon)
-		surface.SetMaterial(mat)
-		surface.DrawTexturedRect(spacing + 1, spacing, 16, 16)
+		self.Icon:Draw(spacing + 1, spacing)
 	end
 end
 
---[[---------------------------------------------------------
-   Name: OnSelect
------------------------------------------------------------]]
 function PANEL:OnSelect()
 
-	-- For override
 	
 end
 
---[[---------------------------------------------------------
-   Name: OnRightClick
------------------------------------------------------------]]
 function PANEL:OnRightClick()
 
-	-- For override
 	
 end
 
---[[---------------------------------------------------------
-   Name: OnMousePressed
------------------------------------------------------------]]
 function PANEL:OnMouseReleased( mcode )
 
 	if ( mcode == MOUSE_RIGHT ) then
 	
-		-- This is probably the expected behaviour..
 		if ( !self:IsLineSelected() ) then
 		
 			self:GetListView():OnClickLine( self, true )
@@ -129,9 +110,6 @@ function PANEL:OnMouseReleased( mcode )
 	
 end
 
---[[---------------------------------------------------------
-   Name: OnMousePressed
------------------------------------------------------------]]
 function PANEL:OnCursorMoved()
 
 	if ( input.IsMouseDown( MOUSE_LEFT ) ) then
@@ -140,18 +118,12 @@ function PANEL:OnCursorMoved()
 	
 end
 
---[[---------------------------------------------------------
-   Name: IsLineSelected
------------------------------------------------------------]]
 function PANEL:IsLineSelected()
 
 	return self.m_bSelected
 
 end
 
---[[---------------------------------------------------------
-   Name: SetColumnText
------------------------------------------------------------]]
 function PANEL:SetColumnText( i, strText )
 
 	if ( type( strText ) == "Panel" ) then
@@ -180,10 +152,6 @@ end
 
 PANEL.SetValue = PANEL.SetColumnText
 
-
---[[---------------------------------------------------------
-   Name: SetColumnText
------------------------------------------------------------]]
 function PANEL:GetColumnText( i )
 
 	if ( !self.Columns[ i ] ) then return "" end
@@ -194,9 +162,6 @@ end
 
 PANEL.GetValue = PANEL.GetColumnText
 
---[[---------------------------------------------------------
-   Name: SetColumnText
------------------------------------------------------------]]
 function PANEL:DataLayout( ListView )
 
 	self:ApplySchemeSettings()
