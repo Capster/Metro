@@ -12,6 +12,7 @@ include( "metro/ui/ScrollBarGrip.lua" )
 include( "metro/ui/PropertySheet.lua" )
 include( "metro/ui/MenuBar.lua" )
 --
+--[[
 include( "metro/ui/DDragBase.lua" )
 include( "metro/ui/DImage.lua" )
 include( "metro/ui/DPanel.lua" )
@@ -49,24 +50,25 @@ include( "metro/ui/DColorMixer.lua" )
 include( "metro/ui/DColorCube.lua" )
 include( "metro/ui/DAlphaBar.lua" )
 include( "metro/ui/DRGBPicker.lua" )
+]]
 --[[
-local frame = Metro.CreateFrame()
-frame:SetSizable(true)
---local grip = Metro.Create("MetroResizeGrip", frame)
-local button = Metro.Create("MetroButton", frame)
+local frametest = Metro.CreateFrame()
+frametest:SetSizable(true)
+--local grip = Metro.Create("MetroResizeGrip", frametest)
+local button = Metro.Create("MetroButton", frametest)
 button:Dock(TOP)
 button:SetTooltip("Testing tooltip stuff")
-local text = Metro.Create("MetroTextEntry", frame)
+local text = Metro.Create("MetroTextEntry", frametest)
 text:Dock(TOP)
 --text:SetDisabled(true)
-]]
 
---[[if ValidPanel(frametest) then
-	frametest:Remove()
+]]
+if ValidPanel(frametest2) then
+	frametest2:Remove()
 end
-frametest = Metro.CreateFrame(600,500)
-frametest:SetSizable(true)
-local PropertySheet = Metro.Create( "MetroPropertySheet", frametest )
+frametest2 = Metro.CreateFrame(600,500)
+frametest2:SetSizable(true)
+local PropertySheet = Metro.Create( "MetroPropertySheet", frametest2 )
 PropertySheet:Dock(FILL)
 
 TheList = Metro.Create( "MetroListView" )
@@ -74,10 +76,10 @@ TheList:Dock(FILL)
 local Col1 = TheList:AddColumn( "Address" )
 local Col2 = TheList:AddColumn( "Port" )
 
-Col2:SetMinWidth( 30 )
-Col2:SetMaxWidth( 30 )
+Col2:SetMinWidth( 55 )
+Col2:SetMaxWidth( 55 )
 for i = 0,50 do
-	TheList:AddLine( "192.168.0."..i, "80" )
+	TheList:AddLine( "192.168.0."..i, "80" ):SetIcon("icon16/user.png")
 end
 
 TheList2 = Metro.Create( "MetroListView" )
@@ -92,14 +94,14 @@ for i = 0,50 do
 end
 PropertySheet:AddSheet( "Clients", TheList, "icon16/group.png", false, false )
 PropertySheet:AddSheet( "Servers", TheList2, "icon16/server.png", false, false )
-]]
-if ValidPanel(frametest) then
-	frametest:Remove()
+--[[
+if ValidPanel(frametest3) then
+	frametest3:Remove()
 end
-frametest = Metro.CreateFrame(600,500)
-frametest:SetSizable(true)
+frametest3 = Metro.CreateFrame(600,500)
+frametest3:SetSizable(true)
 
-local UpMenu = Metro.Create( "MetroMenuBar", frametest )
+local UpMenu = Metro.Create( "MetroMenuBar", frametest3 )
 UpMenu:Dock(TOP)
 
 local fileMenu = UpMenu:AddMenu ("File")
@@ -110,3 +112,4 @@ editMenu:AddOption ("Undo", function()end):SetIcon ("icon16/arrow_undo.png")
 local viewMenu = UpMenu:AddMenu ("View")
 viewMenu:AddOption ("Mode", function() end):SetIcon ("icon16/application_view_list.png")
 
+]]

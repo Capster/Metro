@@ -31,16 +31,21 @@ AccessorFunc( PANEL, "m_iID", 				"ID" )
 AccessorFunc( PANEL, "m_pListView", 		"ListView" )
 AccessorFunc( PANEL, "m_bAlt", 				"AltLine" )
 
---[[---------------------------------------------------------
-   Name: Init
------------------------------------------------------------]]
+fastlua.Bind(PANEL, "Icon", nil)
+
+function PANEL:SetIcon(icon)
+	if not self.Icon then
+		self:SetColumnText( 1, "      "..self:GetColumnText(1) )
+	end
+	self.Icon = icon
+end
+
 function PANEL:Init()
 
 	self:SetSelectable( true )
 	self:SetMouseInputEnabled( true )
 	
 	self.Columns = {}
-
 end
 
 function PANEL:Paint(w, h)
@@ -68,6 +73,14 @@ function PANEL:Paint(w, h)
 
 		--draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.LVLineHovered)
 	         
+	end
+	
+	if self.Icon then
+		--self:SetText("   "..self:GetText())
+		local spacing = (self:GetTall () - 16) * 0.5
+		local mat = Material(self.Icon)
+		surface.SetMaterial(mat)
+		surface.DrawTexturedRect(spacing + 1, spacing, 16, 16)
 	end
 end
 

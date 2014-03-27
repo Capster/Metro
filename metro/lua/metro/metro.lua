@@ -9,6 +9,7 @@
 --
 --## TODOs:
 --	- Static debug VGUI functions
+--	- Image Cache
 --
 -- @module metro
 
