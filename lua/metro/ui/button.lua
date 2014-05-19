@@ -17,7 +17,7 @@ function PANEL:Init()
 	self:SetMouseInputEnabled( true )
 	self:SetKeyboardInputEnabled( true )
 
-	--self:SetCursor( "hand" )
+	self:SetCursor( "arrow" )
 	self:SetFont( "DermaDefault" )
 
 end

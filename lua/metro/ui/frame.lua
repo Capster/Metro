@@ -21,7 +21,6 @@ function PANEL:Init()
 	self.btnClose = Metro.Create( "MetroButton", self )
 	self.btnClose:SetSize(42, 16)
 	self.btnClose:SetText( "" )
-	self.btnClose:SetCursor( "arrow" )
 	self.btnClose.DoClick = function ( button ) self:Close() end
 	self.btnClose.PerformLayout = function(button, w, h)	
 		button:SetPos(self:GetWide() - button:GetWide() - 4, 1)
@@ -35,9 +34,8 @@ function PANEL:Init()
 	end
 	
 	self.btnMaxim = Metro.Create( "MetroButton", self )
-	self.btnMaxim:SetSize(36, 16)
+	self.btnMaxim:SetSize(30, 16)
 	self.btnMaxim:SetText( "" )
-	self.btnMaxim:SetCursor( "arrow" )
 	self.btnMaxim.DoClick = function ( button )
 		self:Toggle()
 	end
@@ -53,6 +51,24 @@ function PANEL:Init()
 			return true
 	end
 
+	self.btnMinim = Metro.Create( "MetroButton", self )
+	self.btnMinim:SetSize(28, 16)
+	self.btnMinim:SetText( "" )
+	self.btnMinim.DoClick = function ( button )
+		self:Close()
+	end
+
+	self.btnMinim.PerformLayout = function(button, w, h)	
+		button:SetPos(self:GetWide() - self.btnClose:GetWide() - self.btnMaxim:GetWide() - button:GetWide() - 4, 1)
+		return true
+	end
+	self.btnMinim.Paint = function(panel, w, h)	
+		local bg = (panel.Depressed and Metro.Colors.OtherButton) or (panel:IsHovered() and Metro.Colors.OtherButtonH) or Color(0,0,0,0)
+			draw.RoundedBox(0, 0, 0, w, h, bg)
+			draw.SimpleText("0", "marlett", w/2, h/2, Metro.Colors.TextDark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
+			return true
+	end
+	
 	self.lblTitle = vgui.Create( "MetroLabel", self )
 	self.lblTitle:SetFont("MetroSmall")
 	self.lblTitle.Paint = function(panel, w, h)	
