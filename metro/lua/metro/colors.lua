@@ -1,8 +1,8 @@
 Metro.Colors = {}
 
 -- FRAME
---Metro.Colors.FrameColor	 	= Color(79, 195, 242, 200)
-Metro.Colors.FrameColor	 	= Color(183, 204, 225)
+Metro.Colors.FrameColor	 	= Color(79, 195, 242, 200)
+--Metro.Colors.FrameColor	 	= Color(37,122,169)
 Metro.Colors.CrossButton 	= Color(199, 80, 80, 255)
 Metro.Colors.OtherButton 	= Color(200, 200, 200, 50)
 Metro.Colors.OtherButtonH 	= Color(200, 200, 200, 100)

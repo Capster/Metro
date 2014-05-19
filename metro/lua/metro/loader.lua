@@ -11,4 +11,4 @@ Metro.IncludeDir("filetypes")
 Metro.IncludeDir("ui")
 Metro.IncludeDir("glyphs")
 
---fastlua:IncludeClient("metro/dev.lua")
+fastlua:IncludeClient("metro/dev.lua")

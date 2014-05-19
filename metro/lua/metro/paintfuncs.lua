@@ -8,28 +8,28 @@ function surface.DrawGrid(x, y, w, h, color)
 
 	for i=0,w do
 		val=val+1
-		if mod(val,2)!=0 then
+		if math.mod(val,2)!=0 then
 			rect( x+i, y, 1, 1 ) 
 		end
 	end
 
 	for i=1,h do
 		val=val+1
-		if mod(val,2)!=0 then
+		if math.mod(val,2)!=0 then
 			rect( x+w, y+i, 1, 1 ) 
 		end
 	end
 
 	for i=1,w do
 		val=val+1
-		if mod(val,2)!=0 then
+		if math.mod(val,2)!=0 then
 			rect( x+w-i, y+h, 1, 1 ) 
 		end
 	end
 
 	for i=1,h do
 		val=val+1
-		if mod(val,2)!=0 then
+		if math.mod(val,2)!=0 then
 			rect( x, y+h-i, 1, 1 ) 
 		end
 	end
