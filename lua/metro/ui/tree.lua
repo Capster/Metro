@@ -25,7 +25,7 @@ function PANEL:Init()
 end
 
 function PANEL:Root()
-	return self.RootNode;
+	return self.RootNode
 end
 
 function PANEL:AddNode( strName, strIcon )
@@ -51,8 +51,8 @@ function PANEL:Clear()
 end
 
 function PANEL:Paint( w, h )
-	derma.SkinHook( "Paint", "Tree", self, w, h )
-	return true
+	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.BorderColor)
+	draw.RoundedBox(0, 1, 1, w-2, h-2, Metro.Colors.InsideColor)
 end
 
 function PANEL:DoClick( node )

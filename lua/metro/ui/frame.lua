@@ -20,7 +20,7 @@ function PANEL:Init()
 	
 	self.btnClose = Metro.Create( "MetroButton", self )
 	self.btnClose:SetSize(42, 16)
-	self.btnClose:SetText( "" )
+	self.btnClose:SetText("")
 	self.btnClose.DoClick = function ( button ) self:Close() end
 	self.btnClose.PerformLayout = function(button, w, h)	
 		button:SetPos(self:GetWide() - button:GetWide() - 4, 1)
@@ -35,7 +35,7 @@ function PANEL:Init()
 	
 	self.btnMaxim = Metro.Create( "MetroButton", self )
 	self.btnMaxim:SetSize(30, 16)
-	self.btnMaxim:SetText( "" )
+	self.btnMaxim:SetText("")
 	self.btnMaxim.DoClick = function ( button )
 		self:Toggle()
 	end
@@ -53,7 +53,7 @@ function PANEL:Init()
 
 	self.btnMinim = Metro.Create( "MetroButton", self )
 	self.btnMinim:SetSize(28, 16)
-	self.btnMinim:SetText( "" )
+	self.btnMinim:SetText("")
 	self.btnMinim.DoClick = function ( button )
 		self:Close()
 	end
@@ -264,7 +264,9 @@ function PANEL:OnMouseReleased()
 end
 
 function PANEL:PerformLayout()
-	self.btnClose:InvalidateLayout()
+	if self.btnClose then
+		self.btnClose:InvalidateLayout()
+	end
 	self.btnMaxim:InvalidateLayout()
 	self.lblTitle:SetPos( 8, 2 )
 	self.lblTitle:SetSize( self:GetWide() - 25, 20 )

@@ -26,7 +26,7 @@ function PANEL:Init()
 
 	self:SetDoubleClickToOpen( true );
 	
-	self.Label = vgui.Create( "DTree_Node_Button", self )
+	self.Label = vgui.Create( "MetroTree_Node_Button", self )
 	self.Label:SetDragParent( self );
 	self.Label.DoClick = function() self:InternalDoClick() end
 	self.Label.DoDoubleClick = function() self:InternalDoClick() end
@@ -333,7 +333,7 @@ function PANEL:AddNode( strName, strIcon )
 	
 	self:CreateChildNodes()
 	
-	local pNode = vgui.Create( "DTree_Node", self )
+	local pNode = Metro.Create( "MetroTree_Node", self )
 		pNode:SetText( strName )
 		pNode:SetParentNode( self )
 		pNode:SetRoot( self:GetRoot() )
@@ -604,11 +604,19 @@ function PANEL:GetChildNode( iNum )
 end
 
 function PANEL:Paint( w, h )
-	derma.SkinHook( "Paint", "TreeNode", self, w, h )
+	if not self.m_bDrawLines then return end
+	surface.SetDrawColor( Color(200, 200, 200) )
+	if self.m_bLastChild then
+		surface.DrawRect( 9, 0,	1, 7 )
+		surface.DrawRect( 9, 7, 9, 1 )
+	else
+		surface.DrawRect( 9, 0, 1, h )
+		surface.DrawRect( 9, 7, 9, 1 )
+	end
 end
 
 function PANEL:Copy()
-	local copy = vgui.Create( "DTree_Node", self:GetParent() )
+	local copy = Metro.Create( "MetroTree_Node", self:GetParent() )
 	copy:SetText( self:GetText() )
 	copy:SetIcon( self:GetIcon() )
 	copy:SetRoot( self:GetRoot() )
