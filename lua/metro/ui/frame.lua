@@ -1,5 +1,3 @@
-
-
 PANEL = {}
 
 AccessorFunc( PANEL, "m_bIsMenuComponent", 		"IsMenu", 			FORCE_BOOL )
@@ -14,21 +12,16 @@ AccessorFunc( PANEL, "m_iMinHeight", 			"MinHeight" )
 
 AccessorFunc( PANEL, "m_bBackgroundBlur", 		"BackgroundBlur", 	FORCE_BOOL )
 
-
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:Init()
 
 	self:SetFocusTopLevel( true )
-
---	self:SetCursor( "sizeall" )
 
 	self:SetPaintShadow( true )
 	
 	self.btnClose = Metro.Create( "MetroButton", self )
 	self.btnClose:SetSize(42, 16)
 	self.btnClose:SetText( "" )
+	self.btnClose:SetCursor( "arrow" )
 	self.btnClose.DoClick = function ( button ) self:Close() end
 	self.btnClose.PerformLayout = function(button, w, h)	
 		button:SetPos(self:GetWide() - button:GetWide() - 4, 1)
@@ -44,7 +37,11 @@ function PANEL:Init()
 	self.btnMaxim = Metro.Create( "MetroButton", self )
 	self.btnMaxim:SetSize(36, 16)
 	self.btnMaxim:SetText( "" )
-	self.btnMaxim.DoClick = function ( button ) self:Close() end
+	self.btnMaxim:SetCursor( "arrow" )
+	self.btnMaxim.DoClick = function ( button )
+		self:Toggle()
+	end
+	--timer.Simple(10, function() self:Remove() end)
 	self.btnMaxim.PerformLayout = function(button, w, h)	
 		button:SetPos(self:GetWide() - self.btnClose:GetWide() - button:GetWide() - 4, 1)
 		return true
@@ -52,18 +49,18 @@ function PANEL:Init()
 	self.btnMaxim.Paint = function(panel, w, h)	
 		local bg = (panel.Depressed and Metro.Colors.OtherButton) or (panel:IsHovered() and Metro.Colors.OtherButtonH) or Color(0,0,0,0)
 			draw.RoundedBox(0, 0, 0, w, h, bg)
-			draw.SimpleText("1", "marlett", w/2, h/2, Metro.Colors.TextDark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
+			draw.SimpleText(self:IsMaximized() and "2" or "1", "marlett", w/2, h/2, Metro.Colors.TextDark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
 			return true
 	end
 
-	self.lblTitle = vgui.Create( "DLabel", self )
+	self.lblTitle = vgui.Create( "MetroLabel", self )
 	self.lblTitle:SetFont("MetroSmall")
 	self.lblTitle.Paint = function(panel, w, h)	
 			draw.SimpleText(self.lblTitle.m_Text, panel.m_FontName, w/2, h/2, Metro.Colors.TextDark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_black )
 			return true
 	end
 	self.lblTitle.UpdateColours = function( label, skin )
-		if ( self:IsActive() ) then return label:SetTextStyleColor( skin.Colours.Window.TitleActive ) end
+		if self:IsActive() then return label:SetTextStyleColor( skin.Colours.Window.TitleActive ) end
 		return label:SetTextStyleColor( skin.Colours.Window.TitleInactive )		
 	end
 	
@@ -73,10 +70,9 @@ function PANEL:Init()
 	self:SetDeleteOnClose( true )
 	self:SetTitle( "Window" )
 	
-	self:SetMinWidth( 200 );
-	self:SetMinHeight( 200 );
+	self:SetMinWidth( 200 )
+	self:SetMinHeight( 200 )
 	
-	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled( false )
 	self:SetPaintBorderEnabled( false )
 	
@@ -84,11 +80,10 @@ function PANEL:Init()
 	
 	self:DockPadding( 5, 24, 5, 5 )
 
+	self.Maximized = false
+	
 end
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:ShowCloseButton( bShow )
 
 	self.btnClose:SetVisible( bShow )
@@ -97,9 +92,6 @@ function PANEL:ShowCloseButton( bShow )
 
 end
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:SetTitle( strTitle )
 
 	self.lblTitle.m_Text = strTitle
@@ -107,32 +99,60 @@ function PANEL:SetTitle( strTitle )
 
 end
 
+function PANEL:CanMaximize()
+	return self:GetSizable()
+end
 
---[[---------------------------------------------------------
+function PANEL:IsMaximized()
+	return self.Maximized
+end
 
------------------------------------------------------------]]
+function PANEL:IsSizable()
+	return self:GetSizable()
+end
+
+function PANEL:Maximize()
+	if self:IsMaximized() then return end
+	
+	self.Maximized = true
+	
+	self.RestoredX, self.RestoredY = self:GetPos()
+	self.RestoredWidth = self:GetWide()
+	self.RestoredHeight = self:GetTall()
+	
+	self:SetPos(0, 0)
+	self:SetSize(self:GetParent():GetSize())
+end
+
+function PANEL:Restore()
+	if not self:IsMaximized() then return end
+	self.Maximized = false
+	self:SetPos(self.RestoredX, self.RestoredY)
+	self:SetSize(self.RestoredWidth, self.RestoredHeight)
+end
+
+function PANEL:Toggle()
+	if self:IsMaximized() then
+		self:Restore()
+		return
+	end
+	self:Maximize()
+end
+
 function PANEL:Close()
-
 	self:SetVisible( false )
 
-	if ( self:GetDeleteOnClose() ) then
+	if self:GetDeleteOnClose() then
 		self:Remove()
 	end
 
 	self:OnClose()
-
 end
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:OnClose()
 
 end
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:Center()
 
 	self:InvalidateLayout( true )
@@ -140,22 +160,17 @@ function PANEL:Center()
 
 end
 
-
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:Think()
 
 	local mousex = math.Clamp( gui.MouseX(), 1, ScrW()-1 )
 	local mousey = math.Clamp( gui.MouseY(), 1, ScrH()-1 )
 		
-	if ( self.Dragging ) then
+	if self.Dragging then
 		
 		local x = mousex - self.Dragging[1]
 		local y = mousey - self.Dragging[2]
 
-		-- Lock to screen bounds if screenlock is enabled
-		if ( self:GetScreenLock() ) then
+		if self:GetScreenLock() then
 		
 			x = math.Clamp( x, 0, ScrW() - self:GetWide() )
 			y = math.Clamp( y, 0, ScrH() - self:GetTall() )
@@ -167,40 +182,29 @@ function PANEL:Think()
 	end
 	
 	
-	if ( self.Sizing ) then
-	
+	if self.Sizing then
 		local x = mousex - self.Sizing[1]
 		local y = mousey - self.Sizing[2]	
 		local px, py = self:GetPos()
 		
-		if ( x < self.m_iMinWidth ) then x = self.m_iMinWidth elseif ( x > ScrW() - px and self:GetScreenLock() ) then x = ScrW() - px end
-		if ( y < self.m_iMinHeight ) then y = self.m_iMinHeight elseif ( y > ScrH() - py and self:GetScreenLock() ) then y = ScrH() - py end
+		if x < self.m_iMinWidth then x = self.m_iMinWidth elseif x > ScrW() - px and self:GetScreenLock() then x = ScrW() - px end
+		if y < self.m_iMinHeight then y = self.m_iMinHeight elseif y > ScrH() - py and self:GetScreenLock() then y = ScrH() - py end
 	
 		self:SetSize( x, y )
-		self:SetCursor( "sizenwse" )
 		return
-	
 	end
 	
-	if ( self.Hovered &&
-		 self.m_bSizable &&
-		 mousex > (self.x + self:GetWide() - 20) &&
-		 mousey > (self.y + self:GetTall() - 20) ) then	
-
-		self:SetCursor( "sizenwse" )
-		return
-		
+	if self.Hovered and self.m_bSizable and mousex > (self.x + self:GetWide() - 20) and mousey > (self.y + self:GetTall() - 20) then	
+		return	
 	end
 	
-	if ( self.Hovered && self:GetDraggable() && mousey < (self.y + 24) ) then
-		--self:SetCursor( "sizeall" )
+	if self.Hovered and self:GetDraggable() and mousey < (self.y + 24) then
 		return
 	end
 	
 	self:SetCursor( "arrow" )
-
-	-- Don't allow the frame to go higher than 0
-	if ( self.y < 0 ) then
+	
+	if self.y < 0 then
 		self:SetPos( self.x, 0 )
 	end
 	
@@ -208,7 +212,7 @@ end
 
 function PANEL:Paint( w, h )
 
-	if  self.m_bBackgroundBlur then
+	if self.m_bBackgroundBlur then
 		Metro.DrawBackgroundBlur( self, self.m_fCreateTime )
 	end
 	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.BorderColor)
@@ -221,70 +225,39 @@ function PANEL:Paint( w, h )
 
 end
 
-
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:OnMousePressed(mc)
-	
-	if ( self.m_bSizable ) then
-	
-		if ( gui.MouseX() > (self.x + self:GetWide() - 20) &&
-			gui.MouseY() > (self.y + self:GetTall() - 20) ) then			
-	
+	if self.m_bSizable then
+		if gui.MouseX() > (self.x + self:GetWide() - 20) and gui.MouseY() > (self.y + self:GetTall() - 20) then			
 			self.Sizing = { gui.MouseX() - self:GetWide(), gui.MouseY() - self:GetTall() }
 			self:MouseCapture( true )
 			return
 		end
-		
 	end
 	
-	if self:GetDraggable() && gui.MouseY() < (self.y + 24) and mc == MOUSE_LEFT then
+	if self:GetDraggable() and gui.MouseY() < (self.y + 24) and mc == MOUSE_LEFT then
 		self.Dragging = { gui.MouseX() - self.x, gui.MouseY() - self.y }
 		self:MouseCapture( true )
 		return
 	end
-	
-
-
 end
 
-
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:OnMouseReleased()
-
 	self.Dragging = nil
 	self.Sizing = nil
 	self:MouseCapture( false )
-
 end
 
-
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:PerformLayout()
-
 	self.btnClose:InvalidateLayout()
 	self.btnMaxim:InvalidateLayout()
 	self.lblTitle:SetPos( 8, 2 )
 	self.lblTitle:SetSize( self:GetWide() - 25, 20 )
-
 end
 
-
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
 function PANEL:IsActive()
-
-	if ( self:HasFocus() ) then return true end
-	if ( vgui.FocusedHasParent( self ) ) then return true end
-	
+	if self:HasFocus() then return true end
+	if vgui.FocusedHasParent( self )then return true end
 	return false
-
 end
 
 Metro.Register("MetroFrame", PANEL, "EditablePanel")
