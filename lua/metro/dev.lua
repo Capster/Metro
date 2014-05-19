@@ -66,3 +66,26 @@ html:Dock(FILL)
 html:OpenURL("http://www.intel.ru/content/www/ru/ru/homepage.html")
 html:CreateAlert( "Awesomium Запрашивает доступ к ClientSide Lua", callback )
 ]]
+if ValidPanel(frametest4) then
+	frametest4:Remove()
+end
+frametest4 = Metro.CreateFrame(1200,800)
+frametest4:SetSizable(true)
+
+local ctrl = vgui.Create( "MetroTree", frametest4 )
+ 
+ctrl:Dock(FILL)
+ 
+local node = ctrl:AddNode( "Node One" )
+local node = ctrl:AddNode( "Node Two" )
+local cnode = node:AddNode( "Node 2.1" )
+local cnode = node:AddNode( "Node 2.2" )
+local cnode = node:AddNode( "Node 2.3" )
+local cnode = node:AddNode( "Node 2.4" )
+local cnode = node:AddNode( "Node 2.5" )
+local gcnode = cnode:AddNode( "Node 2.5" )
+local cnode = node:AddNode( "Node 2.6" )
+local node = ctrl:AddNode( "Node Three ( Maps Folder )" )
+--node:MakeFolder( "lua", "GAME" )
+--:FilePopulateCallback( files, folders, foldername, path, bAndChildren )
+local node = ctrl:AddNode( "Node Four" )
