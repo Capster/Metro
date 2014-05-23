@@ -66,6 +66,7 @@ html:Dock(FILL)
 html:OpenURL("http://www.intel.ru/content/www/ru/ru/homepage.html")
 html:CreateAlert( "Awesomium Запрашивает доступ к ClientSide Lua", callback )
 ]]
+--[[
 timer.Simple(0, function() 
 	if ValidPanel(frametest4) then
 		frametest4:Remove()
@@ -90,4 +91,4 @@ timer.Simple(0, function()
 	node:MakeFolder( "lua", "GAME" )
 	--:FilePopulateCallback( files, folders, foldername, path, bAndChildren )
 	local node = ctrl:AddNode( "Node Four" )
-end)
+end)]]
