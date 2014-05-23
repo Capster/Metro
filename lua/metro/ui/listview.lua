@@ -610,6 +610,12 @@ function PANEL:Clear()
 	self:SetDirty( true )
 
 end
+function PANEL:ClearColumns()
+	for k,v in pairs(self.Columns) do
+		v:Remove()
+	end
+	self.Columns = {}
+end
 
 --[[---------------------------------------------------------
    Name: GetSelected
@@ -628,15 +634,31 @@ function PANEL:GetSelected()
 
 end
 
-
---[[---------------------------------------------------------
-   Name: SizeToContents
------------------------------------------------------------]]
 function PANEL:SizeToContents( )
 
 	self:SetHeight( self.pnlCanvas:GetTall() + self:GetHeaderHeight() )
 	
 
+end
+
+function PANEL:SetFolder(folder)
+	local target = "GAME"
+	local files, folders = file.Find(folder.."/*", target)
+	
+	self:Clear()
+	self:ClearColumns()
+	
+	self:AddColumn("Name")
+	self:AddColumn("Date")
+	self:AddColumn("Size")
+	
+	for k,v in pairs(files) do
+		local size = string.NiceSize(file.Size(folder.."/"..v, target))
+		local date = os.date("%d.%m.%Y", file.Time(folder.."/"..v, target))
+		local type = Metro.FileTypes:GetTypeFromExtension(Metro.FileTypes:GetExtensionFromName(v))
+		
+		self:AddLine(v, date, size):SetIcon(type.Icon)
+	end
 end
 
 Metro.Register( "MetroListView", PANEL, "DPanel" )
