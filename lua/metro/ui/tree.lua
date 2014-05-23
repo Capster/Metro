@@ -89,5 +89,5 @@ function PANEL:LayoutTree()
 	self:InvalidateChildren( true )
 end
 
-Metro.Register("MetroTree", PANEL, "DScrollPanel")
+Metro.Register("MetroTree", PANEL, "MetroScrollPanel")
 
