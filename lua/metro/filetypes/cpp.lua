@@ -1,7 +1,7 @@
 local type = {}
 
 type.Name = "C++"
-type.Icon = "icon16/page_white_cpp.png"
+type.Icon = "icon16/page_white_cplusplus.png"
 type.Extension = ".cpp"
 
 function type:Callback(strContent)
