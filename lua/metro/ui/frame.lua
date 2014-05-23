@@ -211,6 +211,7 @@ function PANEL:Think()
 	end
 	
 	if self.Hovered and self.m_bSizable and mousex > (self.x + self:GetWide() - 20) and mousey > (self.y + self:GetTall() - 20) then	
+		self:SetCursor( "sizenwse" )
 		return	
 	end
 	
@@ -225,6 +226,9 @@ function PANEL:Think()
 	end
 	
 end
+
+Metro.Frame = {}
+Metro.Frame.Think = PANEL.Think -- Wah.
 
 function PANEL:Paint( w, h )
 

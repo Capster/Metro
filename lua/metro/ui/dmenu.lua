@@ -89,7 +89,7 @@ end
 --[[---------------------------------------------------------
 	AddSpacer
 -----------------------------------------------------------]]
-function PANEL:AddSpacer( strText, funcFunction )
+function PANEL:AddSpacer()
 
 	local pnl = vgui.Create( "DPanel", self )
 	pnl.Paint = function( p, w, h )
