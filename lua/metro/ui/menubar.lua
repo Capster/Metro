@@ -22,8 +22,8 @@ end
 
 function PANEL:Paint(w, h)
 	draw.RoundedBox(0, 0, 0, w, h, Metro.Colors.MBBackground)
-	draw.RoundedBox(0, 0, h-1, w, 1, Metro.Colors.MBBorder1)
-	draw.RoundedBox(0, 0, h-2, w, 1, Metro.Colors.MBBorder2)
+	--draw.RoundedBox(0, 0, h-1, w, 1, Metro.Colors.MBBorder1)
+	--draw.RoundedBox(0, 0, h-2, w, 1, Metro.Colors.MBBorder2)
 end
 
 function PANEL:GetOpenMenu()

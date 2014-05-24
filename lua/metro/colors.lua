@@ -70,9 +70,9 @@ Metro.Colors.TabsTab		= Color(240, 240, 240)
 Metro.Colors.TabsSeleced	= Color(255, 255, 255)
 
 -- MENUBAR
-Metro.Colors.MBBackground	= Color(245, 246, 247)
-Metro.Colors.MBBorder1		= Color(240, 240, 240)
-Metro.Colors.MBBorder2		= Color(132, 132, 132)
+Metro.Colors.MBBackground	= Color(240, 240, 240)
+--Metro.Colors.MBBorder1		= Color(240, 240, 240)
+--Metro.Colors.MBBorder2		= Color(132, 132, 132)
 
 
 -- WARNING
