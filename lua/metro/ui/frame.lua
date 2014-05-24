@@ -272,6 +272,7 @@ function PANEL:PerformLayout()
 		self.btnClose:InvalidateLayout()
 	end
 	self.btnMaxim:InvalidateLayout()
+	self.btnMinim:InvalidateLayout()
 	self.lblTitle:SetPos( 8, 2 )
 	self.lblTitle:SetSize( self:GetWide() - 25, 20 )
 end
