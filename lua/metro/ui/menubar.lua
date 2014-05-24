@@ -52,9 +52,10 @@ function PANEL:AddMenu( label )
 	self.Menus[ label ] = m
 	
 	local b = self:Add( "MetroButton" )
-	b:SetText( label )
+	b:SetText( label:upper() )
 	b:Dock( LEFT )
 	b:DockMargin( 5, 0, 0, 0 )
+	b:SetFont("MetroMiddle")
 	b:SetIsMenu( true )
 	b:SetDrawBackground( false )
 	b:SizeToContentsX( 30 )
@@ -69,6 +70,11 @@ function PANEL:AddMenu( label )
 			draw.RoundedBox( 0, 0, 0, w, h-2, Metro.Colors.MBBackground )
 		end
 	end
+	
+	b.UpdateColours = function(self)
+		return self:SetTextStyleColor( Metro.Colors.TextDark )
+	end
+	
 	b.DoClick = function() 
 	
 		if ( m:IsVisible() ) then

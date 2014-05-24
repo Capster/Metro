@@ -18,6 +18,7 @@ Metro = {}
 Metro.Frames = {}
 
 surface.CreateFont("MetroSmall", {font =  "Default", size = 13, antialias = true, outline = false, weight = 540, })
+surface.CreateFont("MetroMiddle", {font =  "Default", size = 14, antialias = true, outline = false, weight = 540, })
 
 function Metro.Register(className, classTable, baseClassName)
 
