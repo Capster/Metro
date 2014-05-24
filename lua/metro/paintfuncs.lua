@@ -36,14 +36,28 @@ function surface.DrawGrid(x, y, w, h, color)
 
 end
 
-local cos, sin, DrawPoly = math.cos, math.sin, surface.DrawPoly
+local cos, sin, rad, DrawPoly, SetTexture = math.cos, math.sin, math.rad, surface.DrawPoly, surface.SetTexture
 
-function surface.DrawFilledCircle(x,y,radius,quality)
-    local circle = {};
-    local tmp = 0;
-    for i=1,quality do
-        tmp = rad(i*360)/quality
-        circle[i] = {x = x + cos(tmp)*radius,y = y + sin(tmp)*radius};
+function surface.DrawFilledCircle(x, y, radius, quality)
+	SetTexture(0)
+
+    local circle = {}
+    local tmp = 0
+    for i=1, quality do
+        tmp = rad(i * 360) / quality
+        circle[i] = {x = x + cos(tmp) * radius, y = y + sin(tmp) * radius}
     end
     DrawPoly(circle)
+end
+
+function surface.DrawTrapezoid(x, y, w, h, z)
+	SetTexture(0)
+	
+	local Trapezoid = {}
+	Trapezoid[1] = { x = (w+z)+x, y = y+h }
+	Trapezoid[2] = { x = x, y = y+h }
+	Trapezoid[3] = { x = x+z, y = y }
+	Trapezoid[4] = { x = w+x, y = y }
+	
+	DrawPoly(Trapezoid)
 end
