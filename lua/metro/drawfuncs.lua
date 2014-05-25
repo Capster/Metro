@@ -8,28 +8,28 @@ function surface.DrawGrid(x, y, w, h, color)
 
 	for i=0,w do
 		val=val+1
-		if math.mod(val,2)!=0 then
+		if mod(val,2)!=0 then
 			rect( x+i, y, 1, 1 ) 
 		end
 	end
 
 	for i=1,h do
 		val=val+1
-		if math.mod(val,2)!=0 then
+		if mod(val,2)!=0 then
 			rect( x+w, y+i, 1, 1 ) 
 		end
 	end
 
 	for i=1,w do
 		val=val+1
-		if math.mod(val,2)!=0 then
+		if mod(val,2)!=0 then
 			rect( x+w-i, y+h, 1, 1 ) 
 		end
 	end
 
 	for i=1,h do
 		val=val+1
-		if math.mod(val,2)!=0 then
+		if mod(val,2)!=0 then
 			rect( x, y+h-i, 1, 1 ) 
 		end
 	end
@@ -50,9 +50,11 @@ function surface.DrawFilledCircle(x, y, radius, quality)
     DrawPoly(circle)
 end
 
-function surface.DrawTrapezoid(x, y, w, h, z)
+local color_white = color_white
+
+function surface.DrawTrapezoid(x, y, w, h, z, color)
 	SetTexture(0)
-	
+	setcolor(color or color_white)
 	local Trapezoid = {}
 	Trapezoid[1] = { x = (w+z)+x, y = y+h }
 	Trapezoid[2] = { x = x, y = y+h }

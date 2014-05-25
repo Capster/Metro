@@ -52,7 +52,7 @@ function PANEL:AddMenu( label )
 	self.Menus[ label ] = m
 	
 	local b = self:Add( "MetroButton" )
-	b:SetText( label:upper() )
+	b:SetText( label )--:upper() )
 	b:Dock( LEFT )
 	b:DockMargin( 5, 0, 0, 0 )
 	b:SetFont("MetroMiddle")

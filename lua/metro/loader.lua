@@ -1,7 +1,7 @@
 fastlua:IncludeClient("metro/colors.lua")
 fastlua:IncludeClient("metro/imagecache.lua")
 fastlua:IncludeClient("metro/tooltip.lua")
-fastlua:IncludeClient("metro/paintfuncs.lua")
+fastlua:IncludeClient("metro/drawfuncs.lua")
 fastlua:IncludeClient("metro/glyphs.lua")
 fastlua:IncludeClient("metro/keyboard.lua")
 fastlua:IncludeClient("metro/postrender.lua")
