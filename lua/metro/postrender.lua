@@ -22,7 +22,7 @@ function Metro.PostRender.Remove(numEnum, strName)
 end
 
 hook.Add("PostRenderVGUI", "Metro.PostRenderHook", function()
-	for k,v in pairs(Metro.PostRenderType) do
+	for k,v in pairs(Metro.RenderType) do
 		if not hooks[v] then continue end
 		for numKey, funcCallback in pairs(v) do
 			funcCallback()
