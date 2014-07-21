@@ -1,33 +1,31 @@
-Metro.PostRenderHooks = {}
+Metro.PostRender = {}
 
-Metro.PostRenderType = {
-	DragDropPreview	= 1,
+Metro.RenderType = {
+	DragDrop		= 1,
 	ToolTip			= 2,
 	ToolTipFix		= 3
 }
 
-hook.Add ("PostRenderVGUI", "Metro.PostRenderHook", function ()
-	if Metro.PostRenderHooks [Metro.PostRenderType.DragDropPreview] then
-		for k, v in pairs (Metro.PostRenderHooks [Metro.PostRenderType.DragDropPreview]) do
-			xpcall (v, Error)
-		end
-	end
-	if Metro.PostRenderHooks [Metro.PostRenderType.ToolTip] then
-		for k, v in pairs (Metro.PostRenderHooks [Metro.PostRenderType.ToolTip]) do
-			xpcall (v, Error)
+local hooks = {}
+
+function Metro.PostRender.Add(numEnum, strName, funcCallback)
+	hooks[numEnum] = hooks[numEnum] or {}
+	hooks[numEnum][strName] = funcCallback
+end
+
+function Metro.PostRender.Get()
+	return hooks
+end
+
+function Metro.PostRender.Remove(numEnum, strName)	
+	hooks[numEnum][strName] = hooks[numEnum] and nil
+end
+
+hook.Add("PostRenderVGUI", "Metro.PostRenderHook", function()
+	for k,v in pairs(Metro.PostRenderType) do
+		if not hooks[v] then continue end
+		for numKey, funcCallback in pairs(v) do
+			funcCallback()
 		end
 	end
 end)
-
-function Metro.AddPostRenderHook (renderType, name, renderFunction)
-	Metro.PostRenderHooks [renderType] = Metro.PostRenderHooks [renderType] or {}
-	Metro.PostRenderHooks [renderType] [name] = renderFunction or function() end
-end
-
-function Metro.RemovePostRenderHook (renderType, name)	
-	if not Metro.PostRenderHooks [renderType] then return end
-	Metro.PostRenderHooks [renderType] [name] = nil
-	if not next (Metro.PostRenderHooks [renderType]) then
-		Metro.PostRenderHooks [renderType] = nil
-	end
-end
